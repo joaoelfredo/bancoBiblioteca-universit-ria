@@ -1,0 +1,104 @@
+-- Criação do banco de dados 
+CREATE DATABASE IF NOT EXISTS biblioteca_universitaria;
+USE biblioteca_universitaria;
+
+-- Tabela de Usuários
+CREATE TABLE usuario (
+    id INT NOT NULL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    matricula VARCHAR(20) UNIQUE NOT NULL,
+    tipo_usuario ENUM('Aluno', 'Professor') NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    telefone BIGINT NOT NULL,
+    endereco VARCHAR(255) NOT NULL,
+    data_nascimento DATE NOT NULL,
+    RFID_Usuario VARCHAR(50) UNIQUE NOT NULL,
+    curso VARCHAR(100) NOT NULL,
+    id_aluno INT,
+    id_professor INT
+);
+
+-- Tabela de Alunos (relacionada a Usuario)
+CREATE TABLE aluno (
+    id INT PRIMARY KEY,
+    curso VARCHAR(100),
+    ano_ingresso YEAR(4),
+    id_usuario INT
+);
+
+-- Tabela de Professores (relacionada a Usuario)
+CREATE TABLE professor (
+    id INT PRIMARY KEY,
+    departamento VARCHAR(100),
+    id_usuario INT
+);
+
+-- Tabela de Categorias de Obras
+CREATE TABLE categoria (
+    id INT PRIMARY KEY,
+    nome_categoria VARCHAR(50)
+);
+
+-- Tabela de Tipos de Obras
+CREATE TABLE tipodeobra (
+    id INT PRIMARY KEY,
+    nome VARCHAR(50)
+);
+
+-- Tabela de Obras
+CREATE TABLE obra (
+    id INT PRIMARY KEY,
+    titulo VARCHAR(200),
+    ISBN VARCHAR(200),
+    editora VARCHAR(100),
+    id_categoria INT,
+    id_tipoDeObra INT,
+    ano_publicacao DATE,
+    numero_paginas INT,
+    qntd_disponivel INT,
+    codigo_RFID VARCHAR(50) UNIQUE
+);
+
+-- Tabela de Empréstimos
+CREATE TABLE emprestimo (
+    id INT PRIMARY KEY,
+    id_usuario INT,
+    id_obra INT,
+    data_emprestimo DATE,
+    data_devolucao DATE,
+    data_prev_devolucao DATE NOT NULL
+);
+
+-- Tabela de Multas
+CREATE TABLE multas (
+    id_multa INT NOT NULL PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    id_emprestimo INT NOT NULL,
+    valor_multa DECIMAL(10, 2) NOT NULL,
+    desconto DECIMAL(10, 2) NOT NULL,
+    valor_final DECIMAL(10, 2) NOT NULL,
+    data_pagamento DATE
+);
+
+-- Relações entre as tabelas (chaves estrangeiras)
+ALTER TABLE usuario
+    ADD FOREIGN KEY (id_aluno) REFERENCES aluno(id),
+    ADD FOREIGN KEY (id_professor) REFERENCES professor(id);
+
+ALTER TABLE aluno
+    ADD FOREIGN KEY (id_usuario) REFERENCES usuario(id);
+
+ALTER TABLE professor
+    ADD FOREIGN KEY (id_usuario) REFERENCES usuario(id);
+
+ALTER TABLE obra
+    ADD FOREIGN KEY (id_categoria) REFERENCES categoria(id),
+    ADD FOREIGN KEY (id_tipoDeObra) REFERENCES tipodeobra(id);
+
+ALTER TABLE emprestimo
+    ADD FOREIGN KEY (id_usuario) REFERENCES usuario(id),
+    ADD FOREIGN KEY (id_obra) REFERENCES obra(id);
+
+ALTER TABLE multas
+    ADD FOREIGN KEY (id_usuario) REFERENCES usuario(id),
+    ADD FOREIGN KEY (id_emprestimo) REFERENCES emprestimo(id);
