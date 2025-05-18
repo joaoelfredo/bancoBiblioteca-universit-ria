@@ -1,0 +1,63 @@
+INSERT INTO categoria (id, nome_categoria) VALUES
+(1, 'Tecnologia'),
+(2, 'Literatura'),
+(3, 'Ciência'),
+(4, 'História'),
+(5, 'Matemática');
+
+-- Inserção de tipos de obras
+INSERT INTO tipodeobra (id, nome) VALUES
+(1, 'Livro'),
+(2, 'Revista'),
+(3, 'Artigo'),
+(4, 'Tese');
+
+-- Inserção de alunos
+INSERT INTO aluno (id, curso, ano_ingresso, id_usuario) VALUES
+(1, 'Engenharia de Software', 2021, NULL),
+(2, 'Física', 2022, NULL),
+(3, 'Matemática', 2023, NULL);
+
+-- Inserção de professores
+INSERT INTO professor (id, departamento, id_usuario) VALUES
+(1, 'Computação', NULL),
+(2, 'Física Teórica', NULL),
+(3, 'História Antiga', NULL);
+
+-- Inserção de usuários
+INSERT INTO usuario (id, nome, matricula, tipo_usuario, email, telefone, endereco, data_nascimento, RFID_Usuario, curso, id_aluno, id_professor) VALUES
+(1, 'Ana Souza', '20210001', 'Aluno', 'ana@universidade.edu', 111111111, 'Rua A, 123', '2003-05-15', 'USR001', 'Engenharia de Software', 1, NULL),
+(2, 'Carlos Lima', '20220001', 'Aluno', 'carlos@universidade.edu', 222222222, 'Rua B, 456', '2004-07-20', 'USR002', 'Física', 2, NULL),
+(3, 'Beatriz Martins', '20230001', 'Aluno', 'beatriz@universidade.edu', 333333333, 'Rua C, 789', '2005-03-10', 'USR003', 'Matemática', 3, NULL),
+(4, 'Prof. João Mendes', 'PROF001', 'Professor', 'joao@universidade.edu', 444444444, 'Rua D, 321', '1975-09-10', 'USR004', 'Computação', NULL, 1),
+(5, 'Profª. Luiza Costa', 'PROF002', 'Professor', 'luiza@universidade.edu', 555555555, 'Rua E, 654', '1980-03-25', 'USR005', 'Física Teórica', NULL, 2),
+(6, 'Prof. Pedro Alencar', 'PROF003', 'Professor', 'pedro@universidade.edu', 666666666, 'Rua F, 987', '1970-08-14', 'USR006', 'História', NULL, 3);
+
+-- Atualização de aluno/professor com id_usuario
+UPDATE aluno SET id_usuario = 1 WHERE id = 1;
+UPDATE aluno SET id_usuario = 2 WHERE id = 2;
+UPDATE aluno SET id_usuario = 3 WHERE id = 3;
+UPDATE professor SET id_usuario = 4 WHERE id = 1;
+UPDATE professor SET id_usuario = 5 WHERE id = 2;
+UPDATE professor SET id_usuario = 6 WHERE id = 3;
+
+-- Inserção de obras
+INSERT INTO obra (id, titulo, ISBN, editora, id_categoria, id_tipoDeObra, ano_publicacao, numero_paginas, qntd_disponivel, codigo_RFID) VALUES
+(1, 'Banco de Dados Moderno', '978-8576057617', 'Alta Books', 1, 1, '2020-01-01', 350, 5, 'OBRA001'),
+(2, 'Dom Casmurro', '978-8572329121', 'L&PM', 2, 1, '1899-01-01', 220, 3, 'OBRA002'),
+(3, 'Astronomia para Iniciantes', '978-8538505393', 'Ciência Hoje', 3, 2, '2015-01-01', 60, 2, 'OBRA003'),
+(4, 'História da Grécia Antiga', '978-8533600832', 'Contexto', 4, 1, '2010-01-01', 480, 1, 'OBRA004'),
+(5, 'Álgebra Linear', '978-8521614917', 'Makron Books', 5, 1, '2018-01-01', 300, 4, 'OBRA005');
+
+-- Inserção de empréstimos
+INSERT INTO emprestimo (id, id_usuario, id_obra, data_emprestimo, data_devolucao, data_prev_devolucao) VALUES
+(1, 1, 1, '2024-04-01', NULL, '2024-04-15'),
+(2, 2, 2, '2024-04-05', '2024-04-20', '2024-04-19'),
+(3, 3, 5, '2024-04-10', NULL, '2024-04-24'),
+(4, 4, 3, '2024-04-12', '2024-04-20', '2024-04-18');
+
+-- Inserção de multas
+INSERT INTO multas (id_multa, id_usuario, id_emprestimo, valor_multa, desconto, valor_final, data_pagamento) VALUES
+(1, 2, 2, 10.00, 2.00, 8.00, '2024-04-21'),
+(2, 3, 3, 15.00, 0.00, 15.00, NULL),
+(3, 4, 4, 5.00, 1.00, 4.00, '2024-04-22');
