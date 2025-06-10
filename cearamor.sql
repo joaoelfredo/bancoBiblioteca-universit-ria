@@ -24,13 +24,40 @@ SELECT
     o.titulo,
     COUNT(e.id) AS total_emprestimos,
     
-    ROUND(COUNT(e.id) / PERIOD_DIFF(DATE_FORMAT(CURDATE(), '%Y%m'), DATE_FORMAT(MIN(e.data_emprestimo), '%Y%m')), 2) AS media_mensal,
+    ROUND(COUNT(e.id) / PERIOD_DIFF(DATE_FORMAT(CURDATE(), '%Y%m'), DATE_FORMAT(MIN(e.data_emprestimo), '%Y%m')), 2) AS media_emp_mensal,
     
     ROUND(COUNT(e.id) / 
         (GREATEST(TIMESTAMPDIFF(MONTH, MIN(e.data_emprestimo), CURDATE()) / 6, 1)), 2
-    ) AS media_semestral,
+    ) AS media_emp_semestral,
 
     COALESCE(SUM(m.valor_final), 0) AS valor_total_multas
+
+FROM obra o
+LEFT JOIN emprestimo e ON o.id = e.id_obra
+LEFT JOIN multas m ON m.id_emprestimo = e.id
+
+GROUP BY o.id, o.titulo
+ORDER BY total_emprestimos DESC;
+------------------------------------------------------------------------------------------------------------------------------------------
+-- versao com quantidade:
+SELECT 
+    o.id AS id_obra,
+    o.titulo,
+    COUNT(e.id) AS total_emprestimos,
+
+    -- Média mensal de empréstimos desde o primeiro registro
+    ROUND(COUNT(e.id) / PERIOD_DIFF(DATE_FORMAT(CURDATE(), '%Y%m'), DATE_FORMAT(MIN(e.data_emprestimo), '%Y%m')), 2) AS media_emp_mensal,
+
+    -- Média semestral
+    ROUND(COUNT(e.id) / 
+        (GREATEST(TIMESTAMPDIFF(MONTH, MIN(e.data_emprestimo), CURDATE()) / 6, 1)), 2
+    ) AS media_emp_semestral,
+
+    -- Valor total de multas
+    COALESCE(SUM(m.valor_final), 0.00) AS valor_total_multas,
+
+    -- Quantidade de multas associadas à obra
+    COUNT(m.id_multa) AS qtd_multas
 
 FROM obra o
 LEFT JOIN emprestimo e ON o.id = e.id_obra
@@ -47,7 +74,7 @@ SELECT
     o.id AS id_obra,
     o.titulo,
     c.nome_categoria AS area_conhecimento,
-    o.qntd_disponivel AS total_no_acervo,
+    o.qntd_disponivel AS volumes_no_acervo,
 
     -- Quantidade de volumes emprestados
     (SELECT COUNT(*) FROM emprestimo e2 WHERE e2.id_obra = o.id) AS volumes_emprestados,
