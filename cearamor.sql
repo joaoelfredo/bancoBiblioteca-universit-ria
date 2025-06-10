@@ -97,7 +97,7 @@ FROM obra o
 JOIN categoria c ON o.id_categoria = c.id
 ORDER BY area_conhecimento, o.titulo;
 
--- relatorio 4
+-- relatorio 3
 SELECT
     u.nome AS nome_usuario,
     u.telefone AS celular,
