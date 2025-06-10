@@ -12,7 +12,7 @@ FROM emprestimo e
 JOIN obra o ON e.id_obra = o.id
 JOIN tipodeobra td ON o.id_tipoDeObra = td.id
 LEFT JOIN multas m ON e.id = m.id_emprestimo
-WHERE e.data_emprestimo >= DATE_SUB(CURDATE(), INTERVAL 12 MONTH)
+WHERE e.data_emprestimo >= DATE_SUB("2025-03-16", INTERVAL 12 MONTH)
 GROUP BY ano_mes, tipo_obra
 ORDER BY ano_mes ASC, tipo_obra ASC;
 
