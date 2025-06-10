@@ -97,3 +97,23 @@ FROM obra o
 JOIN categoria c ON o.id_categoria = c.id
 ORDER BY area_conhecimento, o.titulo;
 
+-- relatorio 4
+SELECT
+    u.nome AS nome_usuario,
+    u.telefone AS celular,
+    o.titulo AS titulo_obra,
+    t.nome AS tipo_obra,
+    
+    DATEDIFF(CURDATE(), e.data_prev_devolucao) AS dias_em_atraso,
+    
+    ROUND(DATEDIFF(CURDATE(), e.data_prev_devolucao) * 1.50, 2) AS multa_estimativa
+
+FROM emprestimo e
+JOIN usuario u ON e.id_usuario = u.id
+JOIN obra o ON e.id_obra = o.id
+JOIN tipodeobra t ON o.id_tipoDeObra = t.id
+
+WHERE e.data_devolucao IS NULL
+  AND CURDATE() > e.data_prev_devolucao
+
+ORDER BY dias_em_atraso DESC;
