@@ -6912,5 +6912,7 @@ INSERT INTO emprestimo (id, id_usuario, id_obra, data_emprestimo, data_devolucao
 VALUES (2099, 93, 521, '2025-03-12', '2025-03-19', '2025-03-19');
 INSERT INTO emprestimo (id, id_usuario, id_obra, data_emprestimo, data_devolucao, data_prev_devolucao)
 VALUES (2100, 80, 922, '2025-03-01', '2025-03-08', '2025-03-08');
+INSERT INTO emprestimo (id, id_usuario, id_obra, data_emprestimo, data_prev_devolucao, data_devolucao)
+VALUES (9999, 1, 1, '2024-05-01', '2024-05-10', NULL);
 SET FOREIGN_KEY_CHECKS = 1;
 -- Atualização de id_aluno e id_professor após inserção
